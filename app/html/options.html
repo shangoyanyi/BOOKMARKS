@@ -1,0 +1,94 @@
+<!doctype html>
+<html ng-app="options" ng-csp>
+  <head>
+    <meta charset="UTF-8">    
+    <title>設定</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../node_modules/angular/angular-csp.css">  
+    <link rel="stylesheet" type="text/css" href="../css/options.css">
+    <!-- JavaScript and HTML must be in separate files -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../../node_modules/angular/angular.js"></script>    
+    <script src="../js/options.js"></script>
+  </head>
+  <body ng-controller="optionsCtrl" ng-init="readBookmarks()">
+    <div class='container'>
+      <h1>Bookmark | 設定</h1>
+      <br/>
+      
+      <div class='row'>
+        <div class='col-xs-4' style='border-right:1px solid #eee;'>
+          <h3><b>新增書籤</b></h3>
+          <br/>              
+          
+          <div>
+            <img ng-src={{bookmarkType.image}} style='width:120px;'>
+          </div>
+          <br/>
+          
+          <div class='form-group'>
+            <label>書籤類型</label>
+            <select class='form-control' ng-model="bookmarkType" ng-options="item.name for item in bookmarkTypes">              
+            </select>
+          </div>         
+          
+              
+          <div class='form-group'>
+            <label>書籤名稱</label>
+            <input type="text" class='form-control' placeholder="輸入書籤名稱" ng-model="bookmarkName">
+          </div>
+          
+          <div class='form-group'>
+            <label>網址</label>
+            <input type="text" class='form-control' placeholder="輸入網址" ng-model="bookmarkUrl">
+          </div>
+          
+          <div class='form-group'>          
+            <button class='btn btn-info' ng-click="addBookmark()">新增</button>
+          </div>
+        </div>
+        
+        <div class='col-xs-8'>
+          <p class='pull-right'>
+            <button class='btn btn-default' ng-click="readBookmarks()">載入目前設定</button>
+            <button class='btn btn-link' ng-click="deleteAllBookmarks()">清除所有設定</button>
+          </p>
+          <div class='clearfix'></div>
+          
+          <div class='media' ng-repeat="item in bookmarks|orderBy:'index'">
+            <div class='media-left'>              
+              <p><img ng-src={{item.imgSrc}} style='width:72px;'></p>
+            </div>
+            <div class='media-body'>
+              <div ng-hide='item.editMode'>
+                <div class='pull-right'>
+                  <button class='btn btn-link' ng-click="editBookmark($index)">編輯</button>
+                  <button class='btn btn-link' ng-click="deleteBookmark($index)">刪除</button>
+                </div>              
+                <h4 ng-hide="item.editMode"><b>{{item.name}}</b></h4>
+                <p ng-hide="item.editMode">{{item.url}}</p>
+              </div>
+              
+              <div ng-show="item.editMode">
+                <div class='pull-right'>
+                    <button class='btn btn-success' ng-click="editBookmarkDone($index)">確定</button>
+                </div>
+                <div class='form-group' style='width:480px;'>
+                  <p><input type='number' ng-model='item.index' min=1 max={{bookmarks.length}}></p>
+                  <p><input type='text' class='form-control' placeholder='請輸入書籤名稱' ng-model="item.name" ></p>
+                  <p><input type='text' class='form-control' placeholder='請輸入書籤網址' ng-model="item.url"></p>
+                </div>
+              </div>
+            </div>            
+          </div>
+          
+          <p>bookmarks: {{bookmarks}}</p>
+          <p>bookmarkType: {{bookmarkType}}</p>
+        </div>
+      </div>  
+    </div>
+  </body>
+</html>
+

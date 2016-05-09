@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+
+  "name": "Bookmark",
+  "description": "Open your favorite webSite in a click",
+  "version": "1.0",
+  "browser_action": {  
+    "default_icon": {
+      "19": "app/img/icon19x19.png" ,
+      "38": "app/img/icon38x38.png"
+    },
+    "default_popup": "app/html/popup.html"
+  },
+  "options_page": "app/html/options.html",
+  "permissions": [    
+    "tabs",    
+    "activeTab",
+    "background",
+    "storage",
+    "*://*/*"    
+  ],
+  "web_accessible_resources":[
+    "app/*"
+  ]
+}

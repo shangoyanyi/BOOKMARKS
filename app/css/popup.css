@@ -1,0 +1,51 @@
+body {
+	width: 400px;
+	
+	font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+	font-size: 14px;
+	white-space: pre;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	overflow-y: auto;		
+}
+
+
+.page-title {
+	font-weight: bold;
+	font-size: 2em;
+}
+
+
+.bookmark-container .bookmark {
+	border-bottom: 1px solid #eee;
+	padding: 5px;
+	margin: 5px;
+}
+
+.bookmark-container .bookmark:hover {
+	background: #e5e5e5;
+	transition: 0.3s ease;
+	cursor: hand;
+	cursor: pointer;
+}
+
+.bookmark-container .bookmark .bookmark-img {
+	height: 38px;
+}
+
+.bookmark-container .bookmark .bookmark-name {
+	padding-left: 10px;
+	font-size: 1.5em;
+}
+
+
+.bookmark-container .bookmark-group {
+	border-bottom: 1px solid #eee;
+	padding: 5px;
+	margin: 5px;
+}
+
+.bookmark-container .bookmark-group .bookmark-group-name{
+	font-weight: bold;
+	font-size: 1.5em;
+}
