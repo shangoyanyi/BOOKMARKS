@@ -63,22 +63,22 @@
             </div>
             <div class='media-body'>
               <div ng-hide='item.editMode'>
-                <div class='pull-right'>
-                  <button class='btn btn-link' ng-click="editBookmark($index)">編輯</button>
-                  <button class='btn btn-link' ng-click="deleteBookmark($index)">刪除</button>
+                <div class='pull-right'>                  
+                  <button class='btn btn-default' ng-click='goUp(item.index)'><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></button>
+                  <button class='btn btn-default' ng-click='goDown(item.index)'><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span></button>
                 </div>              
-                <h4 ng-hide="item.editMode"><b>{{item.name}}</b></h4>
-                <p ng-hide="item.editMode">{{item.url}}</p>
+                <h4 ng-hide="item.editMode"><b>{{item.bookmarkType}} | {{item.name}}</b> <button class='btn btn-link' ng-click="editBookmark($index)">編輯</button></h4>
+                <p ng-hide="item.editMode">{{item.url}}</p>                
               </div>
               
               <div ng-show="item.editMode">
                 <div class='pull-right'>
-                    <button class='btn btn-success' ng-click="editBookmarkDone($index)">確定</button>
+                    <button class='btn btn-danger' ng-click="deleteBookmark($index)">刪除</button>                    
                 </div>
-                <div class='form-group' style='width:480px;'>
-                  <p><input type='number' ng-model='item.index' min=1 max={{bookmarks.length}}></p>
+                <div class='form-group' style='width:480px;'>                  
                   <p><input type='text' class='form-control' placeholder='請輸入書籤名稱' ng-model="item.name" ></p>
                   <p><input type='text' class='form-control' placeholder='請輸入書籤網址' ng-model="item.url"></p>
+                  <p><button class='btn btn-success' ng-click="editBookmarkDone($index)">確定</button></p>
                 </div>
               </div>
             </div>            

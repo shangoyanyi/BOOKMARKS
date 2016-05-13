@@ -50,7 +50,8 @@ function optionsCtrl($scope, $http, $filter){
   $scope.addBookmark = function(){
     $scope.bookmarks.push(
       newBookmark(
-        $scope.bookmarkType.name + ' | ' + $scope.bookmarkName, 
+        $scope.bookmarkType.name,
+        $scope.bookmarkName, 
         $scope.bookmarkUrl, 
         $scope.bookmarkType.image
       )
@@ -106,9 +107,81 @@ function optionsCtrl($scope, $http, $filter){
   
   
   
-  function newBookmark(name, url, imgSrc){
+  $scope.goUp = function(i){
+    console.log('going up, i=' + i);
+    if(i>1){
+      var newBookmarks = [];
+      var temp1;
+      var temp2;
+      
+      $scope.bookmarks.forEach(function(item){
+        if(item.index == i-1){
+          temp1 = newBookmark(item.bookmarkType, item.name, item.url, item.imgSrc);
+          temp1.index = item.index + 1;
+          
+          newBookmarks.push(temp1);
+          
+        }else if(item.index == i){
+          temp2 = newBookmark(item.bookmarkType, item.name, item.url, item.imgSrc);
+          temp2.index = item.index - 1;
+          
+          newBookmarks.push(temp2);
+          
+        }else{
+          newBookmarks.push(item);
+        }
+      });
+      
+      console.log(JSON.stringify('newBookmarks:' + newBookmarks));      
+      $scope.bookmarks = newBookmarks;
+      
+      chrome.storage.sync.set({bookmarks: $scope.bookmarks}, function(){
+        console.log("bookmarks saved");
+      });
+    }
+  }
+  
+  $scope.goDown = function(i){
+    console.log('going down, i=' + i);    
+    
+    if(i< $scope.bookmarks.length){
+      var newBookmarks = [];
+      var temp1;
+      var temp2;
+      
+      $scope.bookmarks.forEach(function(item){
+        if(item.index == i){
+          temp1 = newBookmark(item.bookmarkType, item.name, item.url, item.imgSrc);
+          temp1.index = item.index + 1;
+                    
+          newBookmarks.push(temp1);
+          
+        }else if(item.index == i+1){
+          temp2 = newBookmark(item.bookmarkType, item.name, item.url, item.imgSrc);
+          temp2.index = item.index - 1;
+          
+          newBookmarks.push(temp2);
+          
+        }else{
+          newBookmarks.push(item);
+        }
+        
+        console.log(JSON.stringify('newBookmarks:' + newBookmarks));      
+        $scope.bookmarks = newBookmarks;
+        
+        chrome.storage.sync.set({bookmarks: $scope.bookmarks}, function(){
+          console.log("bookmarks saved");
+        });
+      });
+    }
+  }
+  
+  
+  
+  function newBookmark(bookmarkType, name, url, imgSrc){
     return {
       index: $scope.bookmarks.length + 1,
+      bookmarkType: bookmarkType,
       name: name,
       url: url,
       imgSrc: imgSrc,
