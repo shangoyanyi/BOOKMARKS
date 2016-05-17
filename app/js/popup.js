@@ -2,13 +2,13 @@ $(function(){
   var newItem  = function(name, url, imgSrc){
     return '<div class="bookmark" data-target="' + url + '">' +
               '<img class="bookmark-img" src="' + imgSrc + '">' + 
-              '<span class="bookmark-name">' + name + '</span>' 
+              '<span class="bookmark-name">' + name + '</span>' + 
            '</div>';
   }
   
   var newItemGroup  = function(groupName){
     return '<div class="bookmark-group">' +              
-              '<span class="bookmark-group-name">' + groupName + '</span>' 
+              '<span class="bookmark-group-name">' + groupName + '</span>' +
            '</div>';
   }
   

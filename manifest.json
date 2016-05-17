@@ -9,9 +9,11 @@
       "19": "app/img/icon19x19.png" ,
       "38": "app/img/icon38x38.png"
     },
-    "default_popup": "app/html/popup.html"
-  },
-  "options_page": "app/html/options.html",
+    "default_popup": "app/main/src/pages/popup/popup.html"
+    // "default_popup": "app/html/popup.html"
+  },  
+  "options_page": "app/main/src/pages/settings/settings.html",
+  // "options_page": "app/html/options.html",
   "permissions": [    
     "tabs",    
     "activeTab",
