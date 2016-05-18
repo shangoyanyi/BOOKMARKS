@@ -56,32 +56,114 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Hello = _react2.default.createClass({
-	    displayName: 'Hello',
+	var BookmarksIsEmpty = _react2.default.createClass({
+	    displayName: 'BookmarksIsEmpty',
 
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
-	            null,
-	            'Hello, world!'
+	            { className: 'bookmark-empty' },
+	            _react2.default.createElement('img', { src: 'http://2.bp.blogspot.com/-uS_sqEbi9Po/U4K7HV1_XII/AAAAAAAAARQ/jv5z0zvIyGw/s1600/Pikachu.600.1445652.jpg' })
 	        );
 	    }
 	});
 
-	// return '<div class="bookmark" data-target="' + url + '">' +
-	//               '<img class="bookmark-img" src="' + imgSrc + '">' +
-	//               '<span class="bookmark-name">' + name + '</span>' +
-	//            '</div>';
+	var Bookmarks = _react2.default.createClass({
+	    displayName: 'Bookmarks',
+
+	    handleClick: function handleClick(url) {
+	        window.open(url);
+	    },
+	    render: function render() {
+	        var bookmarkNodes = this.props.data.map(function (bookmark) {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'bookmark', key: bookmark.id, onClick: this.handleClick.bind(this, bookmark.url) },
+	                _react2.default.createElement('img', { className: 'bookmark-img', src: bookmark.imgSrc }),
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'bookmark-name' },
+	                    bookmark.name
+	                )
+	            );
+	        }.bind(this));
+
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'bookmark-container' },
+	            bookmarkNodes
+	        );
+	    }
+	});
 
 	var BookmarkBox = _react2.default.createClass({
 	    displayName: 'BookmarkBox',
 
+	    getInitialState: function getInitialState() {
+	        return {
+	            title: 'Title',
+	            info: 'info',
+	            bookmarks: []
+	        };
+	    },
+	    getSettings: function getSettings() {
+	        chrome.storage.sync.get("bookmarks", function (result) {
+	            console.log("load bookmarks result:" + JSON.stringify(result));
+	        });
+	    },
+	    componentDidMount: function componentDidMount() {
+	        this.getSettings();
+	        this.setState({
+	            title: 'myBookmarks',
+	            info: 'my first bookmarks',
+	            // bookmarks : [{
+	            //     id : '1',             
+	            //     name:'Slack | chtmember',
+	            //     url:'https://chtmember.slack.com',
+	            //     imgSrc:'https://a.slack-edge.com/0180/img/icons/app-256.png'
+	            // },{
+	            //     id : '2',             
+	            //     name:'Slack | Mirakuru',
+	            //     url:'https://mirakuru.slack.com',
+	            //     imgSrc:'https://a.slack-edge.com/0180/img/icons/app-256.png'
+	            // }]
+	            bookmarks: []
+	        });
+	    },
 	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            null,
-	            'I\'m a Bookmarks list'
-	        );
+	        if (this.state.bookmarks.length > 0) {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'page-title' },
+	                    this.state.title
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'page-info' },
+	                    this.state.info
+	                ),
+	                _react2.default.createElement(Bookmarks, { data: this.state.bookmarks })
+	            );
+	        } else {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'page-title' },
+	                    this.state.title
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'page-info' },
+	                    this.state.info
+	                ),
+	                _react2.default.createElement(BookmarksIsEmpty, null)
+	            );
+	        }
 	    }
 	});
 
