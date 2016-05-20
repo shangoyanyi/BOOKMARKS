@@ -55,8 +55,8 @@ var BookmarkBox = React.createClass({
                 console.log('no settings');
                 
                 this.setState({
-                    title:  'Not Found',
-                    info: 'found no settings, generate it first',
+                    title:  'No Settings!',
+                    info: 'create your first settings',
                     bookmarks: []
                 });
                 
@@ -73,8 +73,8 @@ var BookmarkBox = React.createClass({
     },
     generateTestData: function(){
       let settings = {
-          title: 'The Punisher',
-          info: 'Frank Castle',
+          title: 'MyBookmarks',
+          info: 'this is my first bookmarks',
           bookmarks: [{
                 id : '1',              
                 name:'Slack | chtmember',

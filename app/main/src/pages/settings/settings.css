@@ -1,0 +1,30 @@
+body {	
+	font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+	font-size: 14px;
+	
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	overflow-y: auto;		
+}
+
+
+.media-bookmark {
+    padding: 20px 0;
+    margin: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.media-bookmark .bookmark-img {
+    width:76px;
+}
+
+.media-bookmark .bookmark-name {
+    font-size: 1.5em;
+    font-weight: 3000;
+}
+
+.media-bookmark .bookmark-url {
+    font-size: 1.25em;
+    font-weight: 1000;
+    color: #aaa;
+}

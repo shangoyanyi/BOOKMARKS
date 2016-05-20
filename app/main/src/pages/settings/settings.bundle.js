@@ -54,21 +54,187 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _utils = __webpack_require__(168);
+
+	var utils = _interopRequireWildcard(_utils);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Hello = _react2.default.createClass({
-	    displayName: 'Hello',
+	var SettingsProfile = _react2.default.createClass({
+	    displayName: 'SettingsProfile',
 
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
 	            null,
-	            'Hello, world!'
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                _react2.default.createElement(
+	                    'b',
+	                    null,
+	                    'Title '
+	                ),
+	                _react2.default.createElement('input', { type: 'text', value: this.props.title, onChange: this.props.onTitleChange })
+	            ),
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                _react2.default.createElement(
+	                    'b',
+	                    null,
+	                    'Info '
+	                ),
+	                _react2.default.createElement('input', { type: 'text', value: this.props.info, onChange: this.props.onInfoChange })
+	            ),
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.props.saveActionHandler },
+	                    '儲存'
+	                )
+	            )
 	        );
 	    }
 	});
 
-	_reactDom2.default.render(_react2.default.createElement(Hello, null), document.getElementById("content"));
+	var SettingsBookmarks = _react2.default.createClass({
+	    displayName: 'SettingsBookmarks',
+
+	    render: function render() {
+	        var bookmarkNodes = this.props.data.map(function (bookmark) {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'media media-bookmark', key: bookmark.id },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'media-left' },
+	                    _react2.default.createElement('img', { className: 'bookmark-img', src: bookmark.imgSrc })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'media-body' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'pull-right' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { className: 'btn btn-link btn-bookmark-delete', onClick: this.props.deleteBookmarkActionHandler, 'data-id': bookmark.id },
+	                            '刪除'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'h4',
+	                        { className: 'bookmark-name' },
+	                        bookmark.name
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'bookmark-url' },
+	                        bookmark.url
+	                    )
+	                )
+	            );
+	        }.bind(this));
+
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'bookmark-container' },
+	            bookmarkNodes
+	        );
+	    }
+	});
+
+	var SettingsBox = _react2.default.createClass({
+	    displayName: 'SettingsBox',
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            title: '',
+	            info: '',
+	            bookmarks: []
+	        };
+	    },
+	    loadSettings: function loadSettings() {
+	        chrome.storage.sync.get("settings", function (result) {
+	            console.log("load settings result:" + JSON.stringify(result));
+
+	            if (utils.isNull(result) || utils.isEmpty(result) || utils.isNull(result.settings) || utils.isEmpty(result.settings)) {
+	                console.log('no settings');
+
+	                this.setState({
+	                    title: 'No Settings!',
+	                    info: 'create your first settings',
+	                    bookmarks: []
+	                });
+	            } else {
+	                var settings = result.settings;
+	                this.setState({
+	                    title: settings.title,
+	                    info: settings.info,
+	                    bookmarks: settings.bookmarks
+	                });
+	            }
+	        }.bind(this));
+	    },
+	    saveSettings: function saveSettings() {
+	        var settings = {
+	            title: this.state.title,
+	            info: this.state.info,
+	            bookmarks: this.state.bookmarks
+	        };
+
+	        chrome.storage.sync.set({ 'settings': settings }, function () {
+	            console.log('settings saved!');
+	            alert('settings saved!');
+	        }.bind(this));
+	    },
+	    handleTitleChanged: function handleTitleChanged(e) {
+	        this.setState({
+	            title: e.target.value
+	        });
+	    },
+	    handleInfoChanged: function handleInfoChanged(e) {
+	        this.setState({
+	            info: e.target.value
+	        });
+	    },
+	    deleteBookmark: function deleteBookmark(e) {
+	        if (confirm('確定要刪除?')) {
+	            console.log('delete bookmark with id:' + e.target.getAttribute('data-id'));
+	        } else {
+	            console.log('delete bookmark with id:' + e.target.getAttribute('data-id') + ' is canceled');
+	        }
+	    },
+	    componentDidMount: function componentDidMount() {
+	        this.loadSettings();
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'settings-container' },
+	            _react2.default.createElement(
+	                'h2',
+	                null,
+	                'Title and Info'
+	            ),
+	            _react2.default.createElement(SettingsProfile, { title: this.state.title, info: this.state.info, onTitleChange: this.handleTitleChanged, onInfoChange: this.handleInfoChanged, saveActionHandler: this.saveSettings }),
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	                'h2',
+	                null,
+	                'Bookmarks'
+	            ),
+	            _react2.default.createElement(SettingsBookmarks, { data: this.state.bookmarks, deleteBookmarkActionHandler: this.deleteBookmark })
+	        );
+	    }
+	});
+
+	_reactDom2.default.render(_react2.default.createElement(SettingsBox, null), document.getElementById("settingsBox"));
 
 /***/ },
 /* 1 */
@@ -20160,6 +20326,37 @@
 	var ReactMount = __webpack_require__(158);
 
 	module.exports = ReactMount.renderSubtreeIntoContainer;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/* 
+	*  this answer is the most suggested on stackoverflow
+	*  http://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
+	*/
+	function isNull(obj) {
+	    return obj == null;
+	}
+
+	/* 
+	*  this method returns true ONLY when obj is an empty object
+	*/
+	function isEmpty(obj) {
+	    for (var prop in obj) {
+	        if (obj.hasOwnProperty(prop)) return false;
+	    }
+
+	    return true && JSON.stringify(obj) === JSON.stringify({});
+	}
+
+	exports.isNull = isNull;
+	exports.isEmpty = isEmpty;
 
 /***/ }
 /******/ ]);
