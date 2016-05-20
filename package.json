@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "webpack": "webpack",
-    "test": "mocha app/test/src/utils.test.js --compilers js:babel-core/register"
+    "test": "mocha app/test/src/common/utils.test.js --compilers js:babel-core/register"
   },
   "author": "Chih-Kuang,Wu <shangoyanyi@gmail.com>",
   "license": "ISC",

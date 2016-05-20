@@ -54,16 +54,22 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _utils = __webpack_require__(168);
+
+	var utils = _interopRequireWildcard(_utils);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var BookmarksIsEmpty = _react2.default.createClass({
-	    displayName: 'BookmarksIsEmpty',
+	var BookmarksEmpty = _react2.default.createClass({
+	    displayName: 'BookmarksEmpty',
 
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'bookmark-empty' },
-	            _react2.default.createElement('img', { src: 'http://2.bp.blogspot.com/-uS_sqEbi9Po/U4K7HV1_XII/AAAAAAAAARQ/jv5z0zvIyGw/s1600/Pikachu.600.1445652.jpg' })
+	            _react2.default.createElement('img', { src: 'http://supperstudio.com/wp-content/uploads/empty-spaces-logo.jpg' })
 	        );
 	    }
 	});
@@ -101,69 +107,103 @@
 
 	    getInitialState: function getInitialState() {
 	        return {
-	            title: 'Title',
-	            info: 'info',
+	            title: '',
+	            info: '',
 	            bookmarks: []
 	        };
 	    },
-	    getSettings: function getSettings() {
-	        chrome.storage.sync.get("bookmarks", function (result) {
-	            console.log("load bookmarks result:" + JSON.stringify(result));
-	        });
+	    loadSettings: function loadSettings() {
+	        chrome.storage.sync.get("settings", function (result) {
+	            console.log("load settings result:" + JSON.stringify(result));
+
+	            if (utils.isNull(result) || utils.isEmpty(result) || utils.isNull(result.settings) || utils.isEmpty(result.settings)) {
+	                console.log('no settings');
+
+	                this.setState({
+	                    title: 'Not Found',
+	                    info: 'found no settings, generate it first',
+	                    bookmarks: []
+	                });
+	            } else {
+	                var settings = result.settings;
+	                this.setState({
+	                    title: settings.title,
+	                    info: settings.info,
+	                    bookmarks: settings.bookmarks
+	                });
+	            }
+	        }.bind(this));
+	    },
+	    generateTestData: function generateTestData() {
+	        var settings = {
+	            title: 'The Punisher',
+	            info: 'Frank Castle',
+	            bookmarks: [{
+	                id: '1',
+	                name: 'Slack | chtmember',
+	                url: 'https://chtmember.slack.com',
+	                imgSrc: 'https://a.slack-edge.com/0180/img/icons/app-256.png'
+	            }, {
+	                id: '2',
+	                name: 'Slack | Mirakuru',
+	                url: 'https://mirakuru.slack.com',
+	                imgSrc: 'https://a.slack-edge.com/0180/img/icons/app-256.png'
+	            }]
+	        };
+
+	        chrome.storage.sync.set({ 'settings': settings }, function () {
+	            console.log('settings saved!');
+
+	            this.setState({
+	                title: settings.title,
+	                info: settings.info,
+	                bookmarks: settings.bookmarks
+	            });
+	        }.bind(this));
+	    },
+	    clearTestData: function clearTestData() {
+	        var settings = {};
+
+	        chrome.storage.sync.set({ 'settings': settings }, function () {
+	            console.log('settings cleared!');
+	            this.loadSettings();
+	        }.bind(this));
 	    },
 	    componentDidMount: function componentDidMount() {
-	        this.getSettings();
-	        this.setState({
-	            title: 'myBookmarks',
-	            info: 'my first bookmarks',
-	            // bookmarks : [{
-	            //     id : '1',             
-	            //     name:'Slack | chtmember',
-	            //     url:'https://chtmember.slack.com',
-	            //     imgSrc:'https://a.slack-edge.com/0180/img/icons/app-256.png'
-	            // },{
-	            //     id : '2',             
-	            //     name:'Slack | Mirakuru',
-	            //     url:'https://mirakuru.slack.com',
-	            //     imgSrc:'https://a.slack-edge.com/0180/img/icons/app-256.png'
-	            // }]
-	            bookmarks: []
-	        });
+	        this.loadSettings();
 	    },
 	    render: function render() {
-	        if (this.state.bookmarks.length > 0) {
-	            return _react2.default.createElement(
+	        var bookmarks = this.state.bookmarks.length > 0 ? _react2.default.createElement(Bookmarks, { data: this.state.bookmarks }) : _react2.default.createElement(BookmarksEmpty, null);
+
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
 	                'div',
+	                { className: 'page-title' },
+	                this.state.title
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'page-info' },
+	                this.state.info
+	            ),
+	            _react2.default.createElement(
+	                'p',
 	                null,
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'page-title' },
-	                    this.state.title
+	                    'button',
+	                    { onClick: this.generateTestData },
+	                    '產生測試資料'
 	                ),
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'page-info' },
-	                    this.state.info
-	                ),
-	                _react2.default.createElement(Bookmarks, { data: this.state.bookmarks })
-	            );
-	        } else {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'page-title' },
-	                    this.state.title
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'page-info' },
-	                    this.state.info
-	                ),
-	                _react2.default.createElement(BookmarksIsEmpty, null)
-	            );
-	        }
+	                    'button',
+	                    { onClick: this.clearTestData },
+	                    '清除測試資料'
+	                )
+	            ),
+	            bookmarks
+	        );
 	    }
 	});
 
@@ -20259,6 +20299,37 @@
 	var ReactMount = __webpack_require__(158);
 
 	module.exports = ReactMount.renderSubtreeIntoContainer;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/* 
+	*  this answer is the most suggested on stackoverflow
+	*  http://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
+	*/
+	function isNull(obj) {
+	    return obj == null;
+	}
+
+	/* 
+	*  this method returns true ONLY when obj is an empty object
+	*/
+	function isEmpty(obj) {
+	    for (var prop in obj) {
+	        if (obj.hasOwnProperty(prop)) return false;
+	    }
+
+	    return true && JSON.stringify(obj) === JSON.stringify({});
+	}
+
+	exports.isNull = isNull;
+	exports.isEmpty = isEmpty;
 
 /***/ }
 /******/ ]);

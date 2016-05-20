@@ -2,7 +2,7 @@
 // var utils = require('../../main/src/utils');
 
 import {should} from 'should';
-import {utils} from '../../main/src/utils';
+import * as utils from '../../../main/src/common/utils';
  
 describe('測試utils', function(){
   before(function(){
